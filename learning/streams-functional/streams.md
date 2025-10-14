@@ -23,11 +23,11 @@ MyInterface add = (a, b) -> a + b
 ## Built in
 Common built-in functional interfaces in java.util.function:
 
-Predicate<T> → returns boolean
-Function<T,R> → transforms T → R
-Consumer<T> → takes T, returns nothing
-Supplier<T> → takes nothing, returns T
-BiFunction<T,U,R> → two inputs, one output
+- Predicate<T> → returns boolean
+- Function<T,R> → transforms T → R
+- Consumer<T> → takes T, returns nothing
+- Supplier<T> → takes nothing, returns T
+- BiFunction<T,U,R> → two inputs, one output
 
 # Method references
 Lambdas can be replaced with method references when possible:
