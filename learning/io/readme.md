@@ -62,3 +62,15 @@ Writer → for writing characters.
 - InputStreamReader: Converts byte stream
 - String reader: Reads from a string
 
+
+
+
+
+
+
+
+
+
+
+
+
