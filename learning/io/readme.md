@@ -62,6 +62,28 @@ Writer → for writing characters.
 - InputStreamReader: Converts byte stream
 - String reader: Reads from a string
 
+# The most common I/O patterns in java
+
+1. standard I/O (System.in, System.out, System.err)
+
+System.in InputStream: Reads bytes from standard input
+System.out PrintStream WritesText to standar output
+System.err PrintStream
+
+2. File I/O (reading/wrting files)
+3. Buffered I/O (fast reading/writing)
+4. Data/Object I/O (Binary data and serialization)
+5. Console I/O with Scanner or BufferReader
+
+
+
+
+
+
+
+
+
+
 
 
 
