@@ -74,25 +74,3 @@ System.err PrintStream
 3. Buffered I/O (fast reading/writing)
 4. Data/Object I/O (Binary data and serialization)
 5. Console I/O with Scanner or BufferReader
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

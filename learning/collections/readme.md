@@ -35,10 +35,10 @@ java.util
 
 
 Interface	HashTable	ResizableArr	BalancedTree	LinkedList	Hastable+LinkedList
-Set     	HashSet  			TreeSet				LinkedHashSet
-List				ArrayList			LinkedList
-Deque				ArrayDeque			LinkedList
-Map		HashMap				TreeMap				LinkedHashMap
+Set     	HashSet  			         TreeSet				    LinkedHashSet
+List				    ArrayList	     LinkedList
+Deque				    ArrayDeque	     LinkedList
+Map		    HashMap				         TreeMap				    LinkedHashMap
 add)
 
 # Map interface
@@ -109,49 +109,48 @@ map.putIfAbsent("Mango", 40);
 map.compute("1", (key,val) -> val == null ? 1 : val + 1);
 
 
+# Review
+
+## List
+Colección ordenada, permite elementos duplicados
+| Clase          | Orden                  | Duplicados | Velocidad                             |
+| -------------- | ---------------------- | ---------- | ------------------------------------- |
+| **ArrayList**  | mantiene orden         | sí         | acceso rápido, insertar lento (medio) |
+| **LinkedList** | mantiene orden         | sí         | inserciones/eliminaciones rápidas     |
+| **Vector**     | antiguo y sincronizado | sí         | lento                                 |
 
 
+## Set
+Colección SIN duplicados.
+| Clase             | Orden                       | Característica           |
+| ----------------- | --------------------------- | ------------------------ |
+| **HashSet**       | no garantiza orden          | más rápido               |
+| **LinkedHashSet** | mantiene orden de inserción | ligeramente más lento    |
+| **TreeSet**       | orden natural o Comparator  | utiliza árbol rojo-negro |
 
+## Map
+Estructura clave valor, llaves unicas
+| Clase                 | Orden                  | Observaciones       |
+| --------------------- | ---------------------- | ------------------- |
+| **HashMap**           | no garantiza orden     | más usado           |
+| **LinkedHashMap**     | orden de inserción     | útil para caches    |
+| **TreeMap**           | ordenado por llave     | basado en árbol     |
+| **Hashtable**         | sincronizado, obsoleto | evitar              |
+| **ConcurrentHashMap** | seguro para hilos      | uso en concurrencia |
 
+## Queue
+FIFO
+| Clase             | Tipo                  | Uso              |
+| ----------------- | --------------------- | ---------------- |
+| **LinkedList**    | FIFO                  | implementa Queue |
+| **PriorityQueue** | orden según prioridad | heap             |
+| **ArrayDeque**    | extremadamente rápida | stack/queue      |
 
+# Deque
+Se puede usar como pila (stack) o cola.
+ArrayDeque (mejor que Stack)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# 
 
 
 

@@ -208,3 +208,12 @@ awaitTermination: Waits for the executor to fully shutdown
 invokeAll(): Runs a list of tasks and waits for all results.
 
 invokeAny(): Runs several tasks and returns the first completed result
+
+| Scenario                  | Use                  |
+| ------------------------- | -------------------- |
+| Many tasks in parallel    | FixedThreadPool      |
+| Many tiny tasks           | CachedThreadPool     |
+| Tasks must run in order   | SingleThreadExecutor |
+| Scheduled/repeating tasks | ScheduledThreadPool  |
+| Need return values        | Callable + Future    |
+| Modern async              | CompletableFuture    |
