@@ -107,6 +107,15 @@ public class Main {
 
 		Map<Integer, List<String>> group = palabras.stream().collect(Collectors.groupingBy(val -> val.length()));
 
+		List<Integer> numbersPartition = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+
+		Map<Boolean, List<Integer>> partition = numbersPartition.stream().collect(Collectors.partitioningBy(val -> val % 2 == 0));
+
+		List<String> nombres2 = new ArrayList<>(List.of("Ana", "Mario", "Luis", "Alfredo", "Luisa"));
+
+		nombres2.removeIf(val -> val.startsWith("A"));
+
+
 	}
 
 
