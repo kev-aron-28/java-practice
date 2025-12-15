@@ -1,0 +1,6 @@
+13,Sofia,22,Argentina
+14,Juan,18,Mexico
+15,Ana,27,Mexico
+16,John,39,USA
+17,Luisa,33,Spain
+18,,45,Mexico

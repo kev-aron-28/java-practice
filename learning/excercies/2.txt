@@ -1,0 +1,6 @@
+7,Carlos,55,Mexico
+8,Ana,31,Mexico
+9,Laura,28,Spain
+10,John,65,USA
+11,Pedro,abc,Mexico
+12,Mario,41,Mexico
