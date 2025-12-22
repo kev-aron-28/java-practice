@@ -189,3 +189,120 @@ Files.walk(Paths.get("root"))
      .filter(Files::isRegularFile)
      .forEach(System.out::println);
 
+
+
+## All uses
+Java I/O is based on 4 big axes:
+
+Direction → Input / Output
+Data type → Byte / Character
+Source / Destination → File, Network, Memory, Console
+Decorator → Buffering, Data types, Objects, Compression
+
+### Root classes 
+| Class          | Type | Purpose                          |
+| -------------- | ---- | -------------------------------- |
+| `InputStream`  | Byte | Read raw bytes                   |
+| `OutputStream` | Byte | Write raw bytes                  |
+| `Reader`       | Char | Read characters (encoding-aware) |
+| `Writer`       | Char | Write characters                 |
+
+
+### Streams
+| Class              | Use                                  |
+| ------------------ | ------------------------------------ |
+| `FileInputStream`  | Read binary files (images, pdf, zip) |
+| `FileOutputStream` | Write binary files                   |
+
+### Character based 
+| Class        | Use              |
+| ------------ | ---------------- |
+| `FileReader` | Read text files  |
+| `FileWriter` | Write text files |
+
+
+### Buffering streams 
+| Class                  | Wraps        | Purpose                |
+| ---------------------- | ------------ | ---------------------- |
+| `BufferedInputStream`  | InputStream  | Reduce syscalls        |
+| `BufferedOutputStream` | OutputStream | Faster writes          |
+| `BufferedReader`       | Reader       | Read lines             |
+| `BufferedWriter`       | Writer       | Efficient text writing |
+
+### Data streams (primitive types)
+| Class              | Purpose          |
+| ------------------ | ---------------- |
+| `DataInputStream`  | Read primitives  |
+| `DataOutputStream` | Write primitives |
+
+### Object streams
+| Class                | Purpose            |
+| -------------------- | ------------------ |
+| `ObjectInputStream`  | Read Java objects  |
+| `ObjectOutputStream` | Write Java objects |
+
+
+### Console streams
+| Stream       | Description    |
+| ------------ | -------------- |
+| `System.in`  | Keyboard input |
+| `System.out` | Console output |
+| `System.err` | Error output   |
+
+
+### Pipe streams
+| Class               | Use                     |
+| ------------------- | ----------------------- |
+| `PipedInputStream`  | Thread-to-thread input  |
+| `PipedOutputStream` | Thread-to-thread output |
+| `PipedReader`       | Char version            |
+| `PipedWriter`       | Char version            |
+
+
+## Common patterns
+
+1. Read from a text file
+BufferedReader reader =
+    Files.newBufferedReader(Path.of("data.txt"), StandardCharsets.UTF_8);
+
+2. Write to a text file
+BufferedWriter writer =
+    Files.newBufferedWriter(Path.of("out.txt"), UTF_8);
+
+3. Read a binary file
+InputStream in =
+    new BufferedInputStream(new FileInputStream("image.png"));
+
+4. Read a small file completely (config, JSON)
+String content = Files.readString(Path.of("config.json"));
+
+5. Network: read text from a socket
+BufferedReader reader =
+    new BufferedReader(
+        new InputStreamReader(socket.getInputStream(), UTF_8)
+    );
+
+6. Send text to a socket
+PrintWriter out =
+    new PrintWriter(
+        new OutputStreamWriter(socket.getOutputStream(), UTF_8),
+        true
+    );
+
+7. Network: Binary protocol
+DataInputStream in =
+    new DataInputStream(
+        new BufferedInputStream(socket.getInputStream())
+    );
+
+DataOutputStream out =
+    new DataOutputStream(
+        new BufferedOutputStream(socket.getOutputStream())
+    );
+
+8. Console input
+Scanner scanner = new Scanner(System.in);
+
+BufferedReader reader =
+    new BufferedReader(new InputStreamReader(System.in));
+

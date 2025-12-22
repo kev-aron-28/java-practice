@@ -1,0 +1,6 @@
+1,Ana,23,Mexico
+2,John,17,USA
+3,Mario,35,Mexico
+4,Luisa,29,Spain
+5,John,42,USA
+6,Ana,19,Mexico
