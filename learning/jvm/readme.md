@@ -154,3 +154,8 @@ JConsole: Lightweight, great for quick peeks at memory and thread status.
 # Practical scenarios
 
 ## 1. High Latency Spikes
+- Symptoms: Latency spikes during peak traffic.
+- Solution: Use G1GC with -XX:MaxGCPauseMillis tuned to a reasonable target (e.g., 200 ms).
+
+## 2. Out of Memory (OOM) Errors
+
