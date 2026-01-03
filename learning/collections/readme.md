@@ -38,7 +38,7 @@ Interface	HashTable	ResizableArr	BalancedTree	LinkedList	Hastable+LinkedList
 Set     	HashSet  			         TreeSet				    LinkedHashSet
 List				    ArrayList	     LinkedList
 Deque				    ArrayDeque	     LinkedList
-Map		HashMap				 TreeMap		       LinkedHashMap
+Map		    HashMap				 TreeMap		       LinkedHashMap
 
 
 # Map interface
