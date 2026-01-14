@@ -221,3 +221,108 @@ Using <T>:
 <T extends Number> void add(List<T> list, T value) {
     list.add(value);
 }
+
+
+## Why generics aalone are not enough?
+
+``` java
+public static double sum(List<Number> numbers) {
+    double sum = 0;
+    for (Number n : numbers) {
+        sum += n.doubleValue();
+    }
+    return sum;
+}
+
+List<Integer> ints = List.of(1, 2, 3);
+sum(ints); // OES NOT COMPILE
+```
+
+** List<Integer> ≠ List<Number> **
+
+
+## Real world fix ? extends (READ ONLY use case)
+You don’t care which Number subtype it is.
+You only want to read numbers.
+
+``` java
+public static double sum(List<? extends Number> numbers) {
+    double sum = 0;
+    for (Number n : numbers) {
+        sum += n.doubleValue();
+    }
+    return sum;
+}
+
+sum(List.of(1, 2, 3));        // Integer
+sum(List.of(1.2, 2.5));      // Double
+sum(List.of(1L, 2L));        // Long
+
+```
+
+** WHy you cant add? **
+Because:
+Could be List<Double>
+Adding an Integer would break it
+
+
+## Real-world fix: ? super (WRITE-ONLY use case)
+Now opposite scenario.
+You want to put values into a collection.
+
+```
+public static void addIntegers(List<? super Integer> list) {
+    list.add(1);
+    list.add(2);
+}
+
+List<Integer> a = new ArrayList<>();
+List<Number> b = new ArrayList<>();
+List<Object> c = new ArrayList<>();
+
+addIntegers(a);
+addIntegers(b);
+addIntegers(c);
+```
+
+Why super?
+Because all of these can hold Integer safely.
+
+
+So essentially when you use:
+- ? extends, you are saying ? value must also extend that type and will accept other classes that also extend it (upper-bounded)
+- ? super, you are saying ? value will only accept the classes that are up the class you are writting in there, like ? super Integer, Only object and Number will be valid as they're up in the heirarchy
+
+
+## Wildcards and subtyping
+
+```
+class A { /* ... */ }
+class B extends A { /* ... */ }
+
+B b = new B();
+A a = b;
+```
+This does not work with generic types
+
+```
+List<B> lb = new ArrayList<>();
+List<A> la = lb;   // compile-time error
+```
+
+Although Integer is a subtype of Number, List<Integer> is not a subtype of List<Number> and, in fact, these two types are not related. The common parent of List<Number> and List<Integer> is List<?>.
+
+In order to create a relationship between these classes so that the code can access Number's methods through List<Integer>'s elements, use an upper bounded wildcard:
+
+```
+List<? extends Integer> intList = new ArrayList<>();
+// This is OK because List<? extends Integer> is a subtype of List<? extends Number>
+List<? extends Number>  numList = intList;  
+```
+
+## Wildcard capture and helper methods
+In some cases, the compiler infers the type of a wildcard. For example, a list may be defined as List<?> but, when evaluating an expression, the compiler infers a particular type from the code. This scenario is known as wildcard capture.
+
+## Guide lines
+An "in" variable is defined with an upper bounded wildcard, using the extends keyword.
+An "out" variable is defined with a lower bounded wildcard, using the super keyword.
