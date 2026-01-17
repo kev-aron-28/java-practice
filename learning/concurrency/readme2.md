@@ -336,3 +336,247 @@ class Bank
 }
 ```
 
+In general a call to await should be inside a loop of the form
+
+``` java
+while (!(OK to proceed)) 
+   condition.await();
+```
+
+WHen should you call signalAll? 
+The rule of thumb is to call signalAll
+whenever the state of an object changes in a way that might be advantageous
+to waiting threads.
+
+
+Note that the call to signalAll does not immediately activate a waiting
+thread. It only unblocks the waiting threads so that they can compete for
+entry into the object after the current thread has relinquished the lock.
+
+Another method, signal, unblocks only a single thread from the wait set,
+chosen at random. That is more efficient than unblocking all threads, but
+there is a danger. If the randomly chosen thread finds that it still cannot
+proceed, it becomes blocked again. If no other thread calls signal again, the
+system deadlocks
+
+----------------------------
+A thread can only call await, signalAll, or signal on a condition if it owns
+the lock of the condition
+
+---------------------------
+
+# The **syncrhonized keyword** 
+A summary of the key points:
+- A lock protects a critical sections of code allowing only one thread to execute the code at a time
+- A lock manages threads that area trying to enter a protected code segment
+- A lock can have one or more associeted condition objects
+- Each condition object manages threads that have entered critical section but cannont proceed
+
+
+Ever since version 1.0, every object in Java has an intrinsic lock. If a method is declared with the synchronized keyword, the object’s lock protects the entire
+method. So to call the method a thread must acquire the intrinsic object lock
+
+So: 
+
+``` java 
+public synchronized void method() 
+{ 
+method body 
+}
+```
+
+is the equivalent of: 
+
+``` java
+public void method() 
+{ 
+   this.intrinsicLock.lock(); 
+   try 
+   { 
+method body 
+   } 
+   finally 
+   { 
+      this.intrinsicLock.unlock(); 
+   } 
+}
+```
+
+The intrinsic object has a single associated condition. The wait method adds a thread to the wait set
+and notifyAll/notify methods unblock waiting threads. Equivalent of await and signalAll
+
+It is also legal to declare static methods as synchronized. If such a method is
+called, it acquires the intrinsic lock of the associated class object. For example, if the Bank class has a static synchronized method, then the lock of the Bank.class object is locked when it is called. As a result, no other thread can call this or any other synchronized static method of the same class
+
+Intrinsic locks have some limitations:
+- You cannot interrupt a thread that is trying to acquire a lock
+- You cannot specify a timeout when trying to acquire a lock
+- having a single condition per lock can be inefficient 
+
+## Syncrhonized blocks
+
+``` java
+synchronized (obj) // this is the syntax for a synchronized 
+{ 
+}
+```
+
+then it acquires the lock for obj.
+
+YOu can find Ad hock locks such as:
+
+``` java
+public class Bank 
+{ 
+   private double[] accounts; 
+   private Lock lock = new Object();   . . . 
+   public void transfer(int from, int to, int amount) 
+   { 
+synchronized (lock) // an ad-hoc lock 
+      { 
+         accounts[from] -= amount; 
+         accounts[to] += amount; 
+      } 
+      System.out.println(. . .); 
+   } 
+}
+```
+
+-  stay away from using primitive type wrappers as locks
+- dont use strings also
+- if you need to modify a static field, lock on the specific class not the value of getClass()
+
+Sometimes, programmers use the lock of an object to implement additional atomic operations—a practice known as client-side locking.
+
+
+The Java virtual machine has built-in support for synchronized methods. However, synchronized blocks are compiled into a lengthy sequence of bytecodes to manage the intrinsic lock
+
+# The monitor concept
+
+In java a monitor has the following properties:
+
+- class with only private fields
+- each object of that class has an associated locks
+- All methods are locked by that lock. 
+- It can have any number of associated conditions
+
+Java object differs from a monitor in three important ways,
+compromising thread safety:
+
+- Fields are not required to be private.
+- Methods are not required to be synchronized
+- The intrinsic lock is available to clients.
+
+## Volatile
+The volatile keyword offers a lock-free mechanism for synchronizing
+access to an instance field. If you declare a field as volatile, then the
+compiler and the virtual machine take into account that the field may be
+concurrently updated by another thread
+
+suppose an object has a boolean flag done that is set by one
+thread and queried by another thread. As we already discussed, you can use
+a lock
+
+``` java
+private boolean done; 
+public synchronized boolean isDone() { return done; } 
+public synchronized void setDone() { done = true; }
+```
+
+The isDone and
+setDone methods can block if another thread has locked the object.
+
+If that is
+a concern, one can use a separate lock just for this variable. But this is
+getting to be a lot of trouble.
+
+In this case, it is reasonable to declare the field as volatile:
+
+``` java
+private volatile boolean done; 
+public boolean isDone() { return done; } 
+public void setDone() { done = true; }
+```
+
+The compiler will insert the appropriate code to ensure that a change to the
+done variable in one thread is visible from any other thread that reads the
+variable
+Volatile variables do not provide any atomicity.
+
+## Final variables
+you cannot safely read a field from multiple threads unless you use locks or the volatile modifier
+
+There is one other situation in which it is safe to access a shared field—when
+it is declared final
+
+``` java
+final var accounts = new  HashMap<String, Double>();
+```
+Without using final, there would be no guarantee that other threads would
+see the updated value of accounts
+
+# Atomics
+CAS (Compare-And-Swap).
+
+There are a number of classes in the java.util.concurrent.atomic package that use machine level instructions
+to guarantee atomicity of other operations without using locks. 
+
+``` java
+import java.util.concurrent.atomic;
+```
+
+For instance, AtomicInteger class has method incrementAndGet and decrementAndGet that atomically increment
+or decrement an integer   It is guaranteed that the correct value is computed and returned, even if multiple
+threads access the same instance concurrently.
+
+- CAS contention under high concurrency
+- Throughput collapses with many writers
+
+When you have a very large number of threads accessing the same atomic values, performance suffers because the optimistic updates require too many retries. The LongAdder and LongAccumulator classes solve this problem. 
+
+A LongAdder is composed of multiple variables whose collective sum is the current value.
+
+LongAccumulator:
+- min/max/sum/custom ops
+- High concurrency
+- Staticts aggregation
+
+LongAdder:
+- High contention
+- Mostly writes
+- REads are occasional
+- Sligh inaccuracy is acceptable
+
+Atomic*:
+- Low contention
+- You need exact immediate value
+- Logic depends on the value
+
+
+# Deadlocks
+Locks and conditions cannot solve all problems that might arise in multithreading. Consider the following situation:
+- Accout 1: 200
+- Account 2: 300
+- Thread 1: Account 1 (300) -> Account 2
+- Thread 2: Account 2 (400) -> Account 1
+
+Neither can proceed because the balances in Accounts 1 and 2 are insufficiens It is possible that all threads get blocked because each is waiting for more
+money. Such a situation is called a deadlock
+
+## Thread local variables
+A ThreadLocal variable gives each thread its own independent copy of a variable
+It is risky sharing variables between threads. Sometimes, you can avoid sharing by giving each thread its own instance usint the ThreadLocal helper class
+
+``` java
+public static final ThreadLocal<SimpleDateFormat> dateFormat 
+   = ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd"));
+String dateStamp = dateFormat.get().format(new Date());
+```
+
+Another common problem is genereting random numbers in multiple threads. While the java.util.random is thread-safe you could use the ThreadLocal helper to give each 
+thread a separate generator. but java 7 provides a convenienve class for you. 
+
+```
+int random = ThreadLocalRandom.current().nextInt(upperBound);
+```
+
