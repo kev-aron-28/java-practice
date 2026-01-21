@@ -368,7 +368,7 @@ the lock of the condition
 # The **syncrhonized keyword** 
 A summary of the key points:
 - A lock protects a critical sections of code allowing only one thread to execute the code at a time
-- A lock manages threads that area trying to enter a protected code segment
+- A lock manages threa ds that area trying to enter a protected code segment
 - A lock can have one or more associeted condition objects
 - Each condition object manages threads that have entered critical section but cannont proceed
 
