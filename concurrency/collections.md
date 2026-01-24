@@ -66,7 +66,7 @@ Future<T> submit(Runnable task, T result)
 In Java, when you run work in another thread (via an ExecutorService), you often want:
 - run asynchronusly the task
 - get the result later
-- check if finished
+- check i finished
 - cancel it 
 - handle failure
 
@@ -85,8 +85,6 @@ You dont create a future directly you get it by submitting a task  to an Executo
 future.isDone();
 future.isCancelled();
 ```
-
-
 
 # Controlling a group of tasks
 
@@ -159,4 +157,37 @@ class SumTask extends RecursiveTask<Long> {
 }
 ```
 
+
+# Composing Completable futures
+
+When you have a Future object, you need to call get to obtain the value blocking until the value is available. The CompletableFuture class implements the Future interface, and it provides a second mechanism for
+obtaining the result. You register a callback that will be invoked (in some thread) with the result once it is available
+
+In this way, you can process the result without blocking once it is available
+To run a task asynchronously and obtain a CompletableFuture, you don’t submit it directly to  executor service. Instead, you call the static method
+CompletableFuture.supplyAsync.
+
+If you omit the executor, the task is run on a default executor (namely the executor returned by ForkJoinPool.commonPool())
+
+Note that the first argument of the supplyAsync method is a Supplier<T>, not a Callable<T> Both interfaces describe functions with no arguments and a
+return value of type T, but a Supplier function cannot throw a checked exception.
+
+The supplied functions is called with the result or null if non and teh exception or null if none
+
+``` java
+f.whenComplete((s, t) -> 
+  { 
+  if (t == null) 
+  { 
+Process the result s; 
+  } 
+  else 
+  { 
+Process the Throwable t; 
+  } 
+  });
+
+```
+
+It is safe to call complete or completeExceptionally on the same future in multiple threads. If the future is already completed, these calls have no effect.
 
