@@ -140,3 +140,201 @@ optionalValue.ifPresent(v -> *Process v*);
 ```
 
 Now, if you want to take an action if the value is present and another if the value is not, the you use ifPresentOrElse
+
+``` java
+
+optionalValue.ifPresentOrElse(
+    v -> do something,
+    () -> do something when not present
+);
+```
+
+
+# Pipelining optional values
+
+You can transform the value inside an optional by using the map method:
+
+```
+Optional<Path> transformed = optionalString.map(Path.of);
+```
+
+This is analog of the map method in a Stream interface. Similarly you can use the filter method to only consider
+Optional values that fulfill a certain property before or after transfroming it.
+
+``` java
+Optional<Path> transformed = optionalString.
+    filter(s -> s.endsWith(".txt"))
+    .map(Path::of);
+```
+
+## Creating optional values
+- Optional.of()
+- Optional.empty()
+- Optional.ofNullable(obj)
+
+## Composing optional value with flatMap
+Suppose you have a method f yielding an Optional<T> and the target type T has a method g yielding an Optional<U>
+
+If s.f() is present then g is applied to it. This works to chain methods.
+
+``` java
+Optional<Double> result = inverse(arg).flatMap(x -> squareRoot(x));
+```
+
+If either the inverse method or the  squareRoot returns Optional.empty(), the result is empty.
+
+## Turning an Optional into a Stream
+
+The stream method turns an Optional<T> into a Stream<T> with zero or more elements. This is useful when methods return an Optional
+result. Suppose you have a stream of user IDs and a method
+
+``` java
+Optional<User> lookup(String id);
+```
+
+Of course you can filter out those invalid IDs and then apply get to the remaining ones:
+
+``` java
+Stream<String> ids = . . .;
+Stream<User> users = ids.map(Users::lookup)
+.filter(Optional::isPresent)
+.map(Optional::get);
+```
+
+And each call to stream method returns a stream with zero or one element and the flatMap method combines them all. That means that 
+the nonexistent users are simply dropped.
+ 
+
+# Collecting result
+
+When you are done with a stream, you will often want to look at the results. 
+
+- You can call the iterator method which yields an old-fashioned iterator
+- call the forEach
+- forEachOrdered
+
+But more ofthen thant not, you will want to collect the result in a data structure.
+- toList()
+- toArray()
+
+Now since its not possible to create a generic array at runtime, the expression stream.toArray returns an Object[].
+If you want the correct type, pass in the array constructor
+
+``` java
+String result[] = stream.toArray(String[]::new);
+```
+
+## Collectors
+
+For collecting stream elements to another target, there is a convenient ** collect ** method, that takes an instance of the Collector interface. 
+
+A collector is an object that accumulates elements and produces a result.
+Before toList was added on Java 16, you had to use the collector produced by Collectors.toList()
+
+``` java
+List<String> result = stream.collect(Collectors.toList());
+```
+
+Also you can collect stream elements into a set
+
+``` java
+Set<String> result = stream.collect(Collectors.toSet());
+```
+
+IF you want to control which kind of collection you get, use the following call instead:
+
+```
+TreeSet<String> result = stream.collect(Collectors.toCollection(TreeSet::new));
+```
+
+If you want to collect all strings in a stream by concatenating them. you call
+
+``` java
+String result = stream.collect(Collectors.joining());
+```
+
+---
+Now when you want something like
+- sum
+- count
+- average
+- maximum
+- minimum
+
+Use one of the summarizing(Int|Long|Double) methods
+
+``` java
+Stream<Integer> ints = Stream.of(1,2,3,5,6,34,2,4,32,1);
+IntSummaryStatistics summary = ints.collect(Collectors.summarizingInt(i -> i));
+```
+
+### Collecting into maps
+Collectors.toMap() with to functions that produce the maps keys and values
+
+``` java
+Map<Integer, Person> idToPerson = people.collect(
+    Collectors.toMap(Person::id, Function.identity())
+); 
+```
+
+IF theres more than one element with the same key, there is a conflic, and the collector will throw.
+You can supply a third function that resolves around the conflict and determines the value for the key
+
+```
+Map<String, String> languageNames =
+Locale.availableLocales().collect(
+    Collectors.toMap(
+    Locale::getDisplayLanguage, 
+    loc -> loc.getDisplayLanguage(loc),
+    (existingValue, newValue) -> existingValue
+        )
+    );
+```
+
+### Grouping and partitioning
+Forming groups of values with the same characteristic is very common, so the groupingBy method
+supports it directly
+
+``` java
+Map<String, List<Locale>> countryToLocales =
+Locale.availableLocales().collect(
+Collectors.groupingBy(Locale::getCountry));
+```
+
+WHen the classifier function is a predicate function (returns a boolean) are partitioned into two lists:
+Those where the function returns true and the complement. In this case it is more efficient to use partitioningBy
+
+``` java
+Map<Boolean, List<Locale>> englishAndOtherLocales =
+Locale.availableLocales().collect(
+Collectors.partitioningBy(l ->
+l.getLanguage().equals("en")));
+List<Locale> englishLocales =
+englishAndOtherLocales.get(true);
+```
+
+### Downstream collectors
+
+The groupingBy method yields a map whose values are lists. If you want to process those lists in some way
+supply a downstream collector
+
+``` java
+Map<String, Set<Locale>> countryToLocaleSet =
+    Locale.availableLocales().collect(
+        groupingBy(Locale::getCountry, toSet())
+    );
+```
+
+Several collectors are provided for reducing collected elements to numbers
+
+
+- Counting
+``` java
+Map<String, Long> countryToLocaleCounts =
+    Locale.availableLocales().collect(
+        groupingBy(Locale::getCountry, 
+        counting())
+    );
+```
+- summing[Int|Long|Double]() and averaging[Int|Long|Double] apply a provided function to the downstream elements
+and produce the sum or average of the function's results 
