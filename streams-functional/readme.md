@@ -337,4 +337,16 @@ Map<String, Long> countryToLocaleCounts =
     );
 ```
 - summing[Int|Long|Double]() and averaging[Int|Long|Double] apply a provided function to the downstream elements
-and produce the sum or average of the function's results 
+and produce the sum or average of the function's results
+
+``` java
+Map<String, Integer> stateToCityPopulation =
+    cities.collect(
+        groupingBy(
+            City::state, 
+            averagingInt(City::population)
+        )
+    );
+```
+
+- maxBy and minBy take a comparator and produce a maximum and minimum of the downstream elements
