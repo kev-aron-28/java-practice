@@ -1,3 +1,4 @@
+
 # Java collections framework
 
 The initial release of java supplied only a small set of classes for the most useful data structures: Vector, Stack, HashTable, BitSet
