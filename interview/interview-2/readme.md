@@ -84,3 +84,37 @@ If your program cannot reach it anymore, it can be deleted.
 
 22. can we define an interface within a class?
 Yes you can define a calss within a class, known as nested interface
+
+23. Can we define a class within an interface?
+yes, you can define a class within an interface within a class, such class is implicitly static and public
+
+24. Can an interface have constructors?
+No, interfaces cannot have constructors. They are meant to define abstract behavior.
+
+25. How do you decide if an inner class is required?
+1. Encaptulation: It tightly couples to the class with its outer class
+2. Grouping: The class logically belongs to and is only used by the outer class
+3. Access: It needs to access private memberof the outer class
+4. Convenience: It simplifies code by keeping related classes together
+
+26. Explain System.out.println
+Is amethod in java used to print messages to console,
+- out is type PrintStream
+
+27. WHy is system.out considered thread-safe?
+Because PrintStream, synchronizes all its methods
+
+28. Can we execute a program without a main? 
+- In traditional java: you need a main method 
+- Java 11: Single file execution: introduced a feature where you can run .java file directly
+
+29. What happens if you run a java program compiled with JDK 14 on a JDK 8 runtime?
+If you run a Java program compiled with JDK 14 with a JDK 8 you will encounter a UnsupportedClassVersionError
+
+30. Can you run a Java 8 compiled application on a JDK 11 runtime?
+Yes, java provides backward compatibility
+
+31. Can you use the throws keyword with run or main()?
+Yes both can declare a throws, however
+1. run() in threads: has no practical effect as the exceptions are not propagated back to the calling thread
+2. main(): allows you to propagate checked exceptions to the JVM
