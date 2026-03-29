@@ -362,7 +362,6 @@ system deadlocks
 ----------------------------
 A thread can only call await, signalAll, or signal on a condition if it owns
 the lock of the condition
-
 ---------------------------
 
 # The **syncrhonized keyword** 

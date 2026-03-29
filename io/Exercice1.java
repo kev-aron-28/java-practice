@@ -12,7 +12,6 @@ import java.nio.file.Paths;
 
 public class Exercice1 {
     public static void main(String[] args) {
-        
     }
 
     public static String readAll(String filename) throws IOException {
