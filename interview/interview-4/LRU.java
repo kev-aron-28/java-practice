@@ -30,7 +30,37 @@ public class LRU {
         tail.prev = head;
     }
 
-    public void remove(Node node) {
+    public int get(int key) {
+        if(!map.containsKey(key)) {
+            return -1;
+        }
+
+        Node node = map.get(key);
+        remove(node);
+        insert(node);
+
+        return node.value;
+    }
+
+    public void put(int key, int value) {
+        if(map.containsKey(key)) {
+            Node old = map.get(key);
+            remove(old);
+        }
+
+        Node node = new Node(key, value);
+        map.put(key, node);
+
+        insert(node);
+
+        if(map.size() > capacity) {
+            Node lru = tail.prev;
+            remove(lru);
+            map.remove(lru.key);
+        } 
+    }
+
+    private void remove(Node node) {
         node.prev.next = node.next;
         node.next.prev = node.prev;
     }
@@ -39,6 +69,7 @@ public class LRU {
         node.next = head.next;
         node.prev = head;
 
-        head.next.
+        head.next.prev = node;
+        head.next = node;
     }
 }
