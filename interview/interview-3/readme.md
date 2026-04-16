@@ -129,3 +129,5 @@ ArrayList:
 Access time: O(1) for get and set operations
 Insertion/Deletion: O(n) for add and remove
 Better suited for frequent access and infrequent modifications
+
+LinkedList:
