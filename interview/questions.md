@@ -36,3 +36,4 @@ Modern java uses tiered compilation:
 # This can be solved by using dependency injection, or by refactoring like using setter injection
 
 
+# How to resolve the diamond problem?
