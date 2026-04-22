@@ -16,6 +16,7 @@ The JVM is the runtime environment that runs your compiled .class files (bytecod
 |   - Stack                                |
 |   - PC Register                          |
 |   - Native Method Stack                  |
+|   - Metaspace                            |
 | Execution Engine                         |
 |   - Interpreter                          |
 |   - JIT Compiler                         |
@@ -42,7 +43,6 @@ There are 3 main built-in classloaders:
 - stack: stores method frames
 - program counter: holds address of next instruction
 - native method stack: for native c\c++ method calls
-
 
 # Heap vs memory stack
 
@@ -159,3 +159,44 @@ JConsole: Lightweight, great for quick peeks at memory and thread status.
 
 ## 2. Out of Memory (OOM) Errors
 
+
+
+# Memory tuning
+You must think in terms of goals first, not flags:
+
+- Do you want low latency?
+- Or maximum throughput?
+- Or predictability?
+
+Core mental model
+Memory = Heap + Non-heap
+
+Heap:
+- Young generation: Short lived objects
+- Old generation: long lived objects
+
+Non-heap:
+- Metaspace
+- Thread stacks
+- Direct memory
+
+# Flags
+
+```
+-Xms512m # Initial heap
+-Xmx512m # Max heap
+```
+
+## Young generation
+
+``` java
+-XX:NewRatio=2
+-XX:NewSize=256m
+-XX:MaxNewSize=256m
+```
+
+## Metaspace
+
+```
+
+```
