@@ -1,8 +1,7 @@
 # Input and output
 
 ## Input/Output Streams
-in the Java API/ an object from which we can read a sequence of bytes is called an input stream. An object to which
-we can write a sequence of bytes is called an output streams.
+in the Java API/ an object from which we can read a sequence of bytes is called an input stream. An object to which we can write a sequence of bytes is called an output streams.
 
 These sources and destinations of byte sequences can be and often are files but they can also be network connections
 and even blocks of memory. The abstract classes InputStream and OutputStream are the basis for a hierarchy 
