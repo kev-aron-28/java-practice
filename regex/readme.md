@@ -1,5 +1,96 @@
 # Regex
 
+Regex is a language for describing text patterns.
+
+Like:
+- Find all numbers
+- Validate emails
+- Extract dates
+- Parse logs
+
+
+# Core symbols
+You can put literal characters
+
+```
+Pattern pattern = Pattern.compile("\cat");
+Matcher matcher = pattern.matcher("cat cat");
+```
+
+# Character classes
+1. Any digit
+
+```
+\d
+```
+
+2. Any letter of digit
+
+```
+\w [a-zA-Z0-9]
+```
+
+3. Whitespace
+
+```
+\s
+```
+
+# Quantifiers
+1. One or more
+```
+\d+
+```
+
+2. Zero or more
+```
+\d*
+```
+
+3. Optional
+
+```
+colou?r
+```
+
+4. Exact count
+
+```
+\d{4}
+```
+
+5. Ragne
+
+```
+\d{2,5}
+```
+
+
+# Anchors
+
+1. Start of line
+
+```
+^
+```
+
+2. End of line
+
+```
+$
+```
+
+# Groups
+capturing groups
+
+```
+(\d+)-(\d+)
+(?<year>\d{4})
+```
+
+
+
+
 Java’s regular expressions (regex) come from the java.util.regex package, mainly using:
 
 Pattern → compiles the regex
