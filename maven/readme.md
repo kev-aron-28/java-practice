@@ -98,3 +98,43 @@ Builds your artifact:
 
 5. mvn install
 Builds the project, copies artifact to local repo
+
+
+# most important commands
+
+1. Clean build
+
+``` bash
+mvn clean install
+```
+
+2. Fast build
+``` bash
+mvn clean package -DskipTests
+```
+
+3. Run test only
+
+``` bash
+mvn test
+```
+
+4. Dependency tree
+
+``` bash
+mvn dependency:tree
+```
+
+5. See effective POM
+
+``` bash
+mvn help:effective-pom
+```
+
+6. Download Dependencies Only
+
+``` bash
+mvn dependency:go-offline 
+```
+
+7. 
