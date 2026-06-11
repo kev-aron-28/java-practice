@@ -25,8 +25,7 @@ When a thread is blocked or waiting, it is temporarily inactive. It doesn’t
 execute any code and consumes minimal resources. It is up to the thread
 scheduler to reactivate it. 
 
-- When the thread tries to acquire an intrinsic object lock (but not a Lock in
-the java.util.concurrent library) that is currently held by another thread,
+- When the thread tries to acquire an intrinsic object lock (but not a Lock inthe java.util.concurrent library) that is currently held by another thread,
 it becomes blocked. The thread becomes unblocked when all other threads have relinquished the lock and the thread
 scheduler has allowed this thread to hold it.
 

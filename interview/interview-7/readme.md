@@ -71,4 +71,8 @@ public static <T> Collection<T> merge(Collection<T> a, Collection<T> b) {}
 List<Number> numbers = merge(new ArrayList<Integer>(), new ArrayList<Double>());
 ```
 
-This does not work
+This does not work, to fix this
+
+``` java
+public static <T extends Number> Collection<T> merge(Collection<? extends T> a,)
+```
