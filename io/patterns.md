@@ -79,7 +79,6 @@ String content = Files.readString(Path.of("file.txt"));
 Files.writeString(Path.of("file.txt"), "Hello");
 ```
 
-
 ## Read all lines
 
 ``` java

@@ -76,3 +76,42 @@ This does not work, to fix this
 ``` java
 public static <T extends Number> Collection<T> merge(Collection<? extends T> a,)
 ```
+
+# Java memory managment
+
+140. How are Strings represented in Memory?
+In Java, strings are represented as objects of the String class. Each string is stored in the heap memory and internally
+is backed by a char[] which holds the actual string data. Java strings are immutable, meaning once created, their content cannot be changed
+
+The immutability is achieved using a special memory area called string pool. The string pool allows for memory optimization by storing string literals only once
+When a new string is created, the JVM checks if the string already exists in the pool:
+- If it does it reuses the reference to the existing string
+
+This approach not only saves memory but also helps with performance, as it avoids unnecessary string duplications
+
+141. Is it possible to resurrect an Object that became eligible for garbage collection?
+Yes it is possible, using the finalize() method
+
+142. What are the default garbage collectors in different Java versions?
+Java uses several garbage collectors, with defaults that has evolved across versions:
+Java 7 and earlier:  Parallel GC
+Java 8: Parallel GC
+Java 9-17: G1 GC
+Java 18+: G1 GC
+
+143. What are Strong, Weak, Soft and Phanthom References and their Role in GC?
+Strong: Is the default type of reference in Java. Any object with a strong reference cannot be garbage collected as long
+as it reference exists
+
+Weak: A weak refernece does not prevent an object from being garbage collected. 
+
+Soft: Similar to weak references but with one key diff: objects with only soft references are not immediatly GCd when they become
+unreachable, only when the JVM is running low on memory
+
+Phantom references: They are the weakest typeof reference and are used to determine when an object has been definitively removed from memory
+
+
+145. What arethe different types of Garbage Collectors in Java?
+- Serial Garbage Collector: A simple, single-threaded GC that pauses all application threads during garbage collection.
+- Parallel Garbage Collector: Uses multiple threads to speed up garbage collection.
+- Concurrent mark sweep: Reduces garbage collection pauses by doing most of the work concurrently

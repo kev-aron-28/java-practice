@@ -321,3 +321,164 @@ FileOutputStream("employee.dat"));
 
 The RandomAccessFile class lets you read or write data anywhere in a file. Disk files are random-access but input/output streams that
 communicate with a network socket are not.
+
+# Diretory in Java
+
+Since Java 7, it is recommended to use:
+
+``` java
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.Files;
+```
+
+Nowadays its prefered to use Path + Files
+
+# Path
+Represents a route in the file system
+
+``` java
+Path path = Paths.get("data/users.txt");
+System.out.println(path.getFileName());
+System.out.println(path.getParent());
+System.out.println(path.getRoot());
+```
+
+
+# Verify if it exists
+``` java
+Path path = Path.of("users.txt");
+
+if (Files.exists(path)) {
+    System.out.println("Exists");
+}
+```
+
+# Create file
+
+``` java
+Path path = Path.of("users.txt");
+
+Files.createFile(path);
+
+java.nio.file.FileAlreadyExistsException
+```
+
+# Create diretory
+``` java
+Files.createDirectory(Path.of("data"));
+```
+
+# Delete files
+
+``` java
+Files.delete(Path.of("users.txt"));
+```
+
+# Copy files
+
+``` java
+Files.copy(
+    Path.of("source.txt"),
+    Path.of("backup.txt")
+);
+```
+
+# Move files
+``` java
+Files.move(
+    Path.of("old.txt"),
+    Path.of("new.txt")
+);
+```
+
+# Read entire file
+
+``` java
+String content =
+    Files.readString(
+        Path.of("users.txt")
+    );
+```
+
+# As a list of lines
+
+``` java
+List<String> lines =
+    Files.readAllLines(
+        Path.of("users.txt")
+    );
+```
+
+# Append content to a file
+
+``` java
+Files.writeString(
+    Path.of("log.txt"),
+    "New Entry\n",
+    StandardOpenOption.APPEND,
+    StandardOpenOption.CREATE
+);
+````
+
+# BufferedReader
+
+``` java
+try (BufferedReader reader =
+         Files.newBufferedReader(
+             Path.of("large.txt"))) {
+
+    String line;
+
+    while ((line = reader.readLine()) != null) {
+        System.out.println(line);
+    }
+}
+```
+
+
+# BufferedWriter
+
+``` java
+try (BufferedWriter writer =
+         Files.newBufferedWriter(
+             Path.of("output.txt"))) {
+
+    writer.write("Hello");
+    writer.newLine();
+    writer.write("World");
+}
+```
+
+# List files of a diretory
+
+``` java
+try (Stream<Path> paths =
+         Files.list(Path.of("data"))) {
+
+    paths.forEach(System.out::println);
+}
+``` 
+
+# Recursively traverse a directory
+
+``` java
+Files.walk(Path.of("data"))
+     .forEach(System.out::println);
+```
+
+# Filter files
+
+``` java
+Files.walk(Path.of("data"))
+     .filter(Files::isRegularFile)
+     .forEach(System.out::println);
+```
+
+# Size of a file
+
+
+``` java
+long size =
+    Files.size(Path.of("users.txt"));
+```
