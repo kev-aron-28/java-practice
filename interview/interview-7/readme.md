@@ -115,3 +115,29 @@ Phantom references: They are the weakest typeof reference and are used to determ
 - Serial Garbage Collector: A simple, single-threaded GC that pauses all application threads during garbage collection.
 - Parallel Garbage Collector: Uses multiple threads to speed up garbage collection.
 - Concurrent mark sweep: Reduces garbage collection pauses by doing most of the work concurrently
+
+146. What perfomance optimizations have you done in your Java project?
+1. Profiled and analyzed performance
+2. Optimized database queries
+2. Implement caching
+3. Tuned garbage collection
+4. Improved concurrency
+5. enhaced code efficiency 
+6. load testing and scaling
+7. asynchrounous processing
+8. Optimized network commncation
+9. Used profiling and monitoring
+
+147. What coding standars do you follow as a Java developer?
+1. Consistent style
+2. Design patterns
+3. Modular architecture
+4. Exception handling
+5. Resource managment
+6. Testing
+7. Performance
+8. Documentation
+9. Code reviews
+10. CI/CD
+
+148. What are different areas in Java memory?
