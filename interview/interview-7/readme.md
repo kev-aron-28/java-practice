@@ -141,3 +141,53 @@ Phantom references: They are the weakest typeof reference and are used to determ
 10. CI/CD
 
 148. What are different areas in Java memory?
+- Heap area: 
+    - Stores: Objects and class instances
+    - Managed by: Garbage collector
+    - Subdivided into:
+        - Young generation
+        - Old generation
+    - Most memory related issues
+    - OutOfMemoryError occur here
+- Stack area
+    - Stores: Method call frames, local variables, references
+    - One stack per thread
+    - Memory is allocated deallocated in LIFO order
+    - Error: StackOverFlowerror if recursion
+- Method area:
+    - Stores: Class metadata, static variables, method info
+    - In java 8+ moved to native memory
+    - Grows dinamically
+- Program count
+    - Stores: Address of the current JVM instruction for eac thread
+    - One per thread
+    - Used to resume execution correctly after a method call or jump
+- Native method stack
+    - Supports: Native method execution
+    - Uses native libraries
+    - Separate from stacks
+
+149. How is memory allocated in this areas?
+    - Heap memory: Managed by the JVM and allocated dynamically during runtime for objects
+    - Stack memory: Allocated for each thread when methods invoked
+    - Method area: Pre-allocated during JVM initliazation and grows as more classes are loaded
+
+150. What are memory leaks in java and how to prevent them?
+A memory leak in Java occurs when objects are no longer needed by the application but are still referenced,
+preventing the garbage collector from reclamiming their memory
+
+- Ensure that objects are deferenced
+- Use appropiate collection classes that allow objects to be garbage collected 
+- Be cautions with listeners, callbacks, and static fields
+
+151. What is metaspace in Java and how does it differ from PermGen?
+Metaspace is the memory area where calss metadat is stored in Java 8 and later versions
+Unlike PermGen, which had a fixed maximum size, Metaspace dynamically resizes based on application needs=
+
+152. How can we monitor Garbage colelction activities in Java?
+1. Using JVM options
+2. JVisualVM
+3. Jconsole
+4. Garbage collection logs + GCViewer
+5. FR (Java Flight recorder) - Java 11 +
+6. 

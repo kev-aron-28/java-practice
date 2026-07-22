@@ -125,3 +125,67 @@ With a half-close:
 - You can continue receiving data.
 
 Indicate "Im done sending, but i am waiting for your response"
+
+``` java
+void shutdownInput()
+void shutdownOutput() sets the input or output stream to “end of stream.”
+boolean isInputShutdown()
+boolean isOutputShutdown(): returns true, if input or output has been shut down
+```
+
+# Interruptible sockets
+When you connect to a socket, the current thread blocks until the connection has been established or a timeout has elapsed
+
+---
+When using virtual threads, socket operations are interruptible and
+--
+
+To interrupt a socket operation, use a SocketChannel, a feature of the java.nio package. Open the SocketChannel like:
+
+``` java
+SocketChannel channel = SocketChannel.open(new InetSocketAddress(host, port));
+```
+
+A channel does not have associated streams. Instead, it has read and write methods that make use of Buffer objects, if you dont want
+to deal with buffers, you can use the Scanner class to read from a SocketChannel because has a constructor with a ReadableByteChannel
+
+``` java
+var in = new Scanner(channel);
+```
+
+To turn a channel into an output stream, use the static Channels.newOutputStream method
+
+``` java
+OutputStream outStream = Channels.newOutputStream(channel);
+```
+
+Whenever a thread is interrupted during an open, read or write operation, the operation does not block, but is terminated with
+an exception
+
+
+## Secure socket communication
+When you implement clients and servers across the Internet and you exchange confidential ino,you do not want to
+use plain text traffic.
+
+- The communication is encrypted, so it cannot be read by third parties
+- The identity of the server is authenticated with a digital signature that the client verifies. 
+- Transmitted data are digitally signed by the sender and verified by the receiver
+
+The TLS (Transport Layer Security) protocol is the most common mechanism for secure communication. it is a successor to the SSL
+(Secure Socket Layer) protocol 
+
+In Java, you use classes from the javax.net.ssl package to establish secure connections. Here is how to construct a socket for a 
+secure connection
+
+``` java
+SocketFactory factory = SSLSocketFactory.getDefault();
+Socket s = factory.createSocket(host, port);
+```
+
+and for secure server sockets, you also use a factory
+
+``` java
+ServerSocketFactory factory =
+SSLServerSocketFactory.getDefault();
+ServerSocket s = factory.createServerSocket(port);
+```
