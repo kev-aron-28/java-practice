@@ -34,8 +34,6 @@ There are 3 main built-in classloaders:
 - Extension classloader: Loads classes from Java_home/lib/ext
 - Application clasloader: loads classes from classpath
 
-
-
 # JVM memory areas 
 
 - method area: stores class metadata, static variables, method code
